@@ -1,8 +1,10 @@
-import { useParams } from "react-router-dom";
+import { useParams, Routes, Route, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getMovieById } from "services/movie-api";
 import MovieCard from "components/MovieCard";
 import Loader from "components/Loader/Loader.js";
+import Cast from "views/Cast";
+import Reviews from "views/Reviews";
 
 const STATUS = {
     IDLE: 'idle',
@@ -52,7 +54,27 @@ export default function MovieDetailView() {
             {status === STATUS.IDLE && <></>}
             {status === STATUS.PENDING && <Loader />}
             {status === STATUS.REJECTED && <h1>{error}</h1>}
-            {status === STATUS.RESOLVED && movie && <MovieCard movie={movie} />}
+            {status === STATUS.RESOLVED && movie &&
+                <>
+                    <MovieCard movie={movie} />
+                    <div >
+                        <p>
+                            <Link to="cast" >
+                                Cast
+                            </Link>
+                        </p>
+                        <p>
+                            <Link to="reviews" >
+                                Reviews
+                            </Link>
+                        </p>
+                    </div>
+                    <Routes>
+                        <Route path="cast" element={<Cast movieId={movieId} />} />
+                        <Route path="reviews" element={<Reviews movieId={movieId} />} />
+                    </Routes>
+                </>
+            }
         </>
     );
 };

@@ -33,7 +33,7 @@ export default function MovieView() {
                 setStatus(STATUS.RESOLVED)
             }).catch(error => {
                 setError(error);
-                setStatus('rejected');
+                setStatus(STATUS.REJECTED);
             });
     }, [query]);
 

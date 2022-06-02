@@ -16,7 +16,7 @@ export default function App() {
         
         <Route path="/" element={<HomeView />}/>
         <Route path="/movies" element={<MoviesView />} />
-        <Route path="/movies/:movieId" element={<MovieDetailView />} />      
+        <Route path="/movies/:movieId/*" element={<MovieDetailView />} />      
         <Route path="*" element={<NotFoundView />}/>
       </Routes>      
     </Container>
