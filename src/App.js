@@ -5,15 +5,18 @@ import Bar from "components/Bar";
 
 import HomeView from "views/HomeView";
 import MoviesView from "views/MoviesView";
-import NotFoundView from "views/NotFoundView/";
-
+import NotFoundView from "views/NotFoundView";
+import MovieDetailView from "views/MovieDetailView";
+ 
 export default function App() {
   return (
     <Container>
       <Bar />      
       <Routes>
+        
         <Route path="/" element={<HomeView />}/>
-        <Route path="/movies" element={<MoviesView />}/>
+        <Route path="/movies" element={<MoviesView />} />
+        <Route path="/movies/:movieId" element={<MovieDetailView />} />      
         <Route path="*" element={<NotFoundView />}/>
       </Routes>      
     </Container>
