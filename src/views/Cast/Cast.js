@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { getCast } from '../../services/movie-api';
 import Loader from 'components/Loader/Loader.js';
 import s from './Cast.module.css';
+import profileImage from '../../images/profileImage.png';
 
 const STATUS = {
     IDLE: 'idle',
@@ -22,8 +23,7 @@ export default function Cast() {
         setStatus(STATUS.PENDING);
         getCast(movieId)
             .then(resp => {
-                const newCast = resp.data.cast.map(({ id, name, profile_path }) => ({ id, name, profile_path, }));
-                console.log(newCast)
+                const newCast = resp.data.cast.map(({ id, name, profile_path, character }) => ({ id, name, profile_path, character }));
                 setCast(newCast);
                 setStatus(STATUS.RESOLVED)
             }).catch(error => {
@@ -42,14 +42,15 @@ export default function Cast() {
                     {cast.length === 0
                         ? <h1 className={s.title}>No info. </h1>
                         : <ul className={s.list}>
-                            {cast.map(({ id, name, profile_path }) => (
+                            {cast.map(({ id, name, profile_path, character }) => (
                                 <li key={id} className={s.item}>
                                     <img
-                                        src={`https://image.tmdb.org/t/p/w500${profile_path}`}
+                                        src={profile_path? `https://image.tmdb.org/t/p/w500${profile_path}` : profileImage}
                                         alt={name}
                                         className={s.image}
                                     />
-                                    <p className={s.text}>{name}</p>                            
+                                    <p className={s.text}>Name: {name}</p>                            
+                                    <p className={s.text}>Character: {character}</p>                            
                                 </li>
                             ))}
                         </ul>
