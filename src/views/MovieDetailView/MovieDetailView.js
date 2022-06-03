@@ -1,10 +1,14 @@
 import { useParams, Routes, Route, Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { getMovieById } from "services/movie-api";
 import MovieCard from "components/MovieCard";
 import Loader from "components/Loader/Loader.js";
-import Cast from "views/Cast";
-import Reviews from "views/Reviews";
+
+// import Cast from "views/Cast";
+// import Reviews from "views/Reviews";
+
+const Cast = lazy(() => import('../Cast'));
+const Reviews = lazy(() => import('../Reviews'));
 
 const STATUS = {
     IDLE: 'idle',
@@ -69,10 +73,12 @@ export default function MovieDetailView() {
                             </Link>
                         </p>
                     </div>
-                    <Routes>
-                        <Route path="cast" element={<Cast movieId={movieId} />} />
-                        <Route path="reviews" element={<Reviews movieId={movieId} />} />
-                    </Routes>
+                    <Suspense fallback={<Loader />}>
+                        <Routes>
+                            <Route path="cast" element={<Cast movieId={movieId} />} />
+                            <Route path="reviews" element={<Reviews movieId={movieId} />} />
+                        </Routes>
+                    </Suspense>
                 </>
             }
         </>
