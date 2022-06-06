@@ -1,8 +1,9 @@
-import { useParams, Routes, Route, Link } from "react-router-dom";
+import { useParams, Routes, Route, Link, useNavigate } from "react-router-dom";
 import { useState, useEffect, lazy, Suspense } from "react";
 import { getMovieById } from "services/movie-api";
 import MovieCard from "components/MovieCard";
 import Loader from "components/Loader/Loader.js";
+import s from './MovieDetailView.module.css';
 
 // import Cast from "views/Cast";
 // import Reviews from "views/Reviews";
@@ -18,6 +19,7 @@ const STATUS = {
 };
 
 export default function MovieDetailView() {
+    const navigate = useNavigate();
     const { movieId } = useParams();
     const [movie, setMovie] = useState('');
     const [status, setStatus] = useState(STATUS.IDLE);
@@ -53,6 +55,8 @@ export default function MovieDetailView() {
         });
     }, [movieId]);
 
+    const goBackBtnClick = ()=> navigate(-1);
+
     return (
         <>
             {status === STATUS.IDLE && <></>}
@@ -60,6 +64,7 @@ export default function MovieDetailView() {
             {status === STATUS.REJECTED && <h1>{error}</h1>}
             {status === STATUS.RESOLVED && movie &&
                 <>
+                    <button className={s.button} onClick={goBackBtnClick}>Go back</button>
                     <MovieCard movie={movie} />
                     <div >
                         <p>
