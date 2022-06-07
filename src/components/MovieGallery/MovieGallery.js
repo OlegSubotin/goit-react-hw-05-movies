@@ -1,10 +1,11 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Notiflix from 'notiflix';
 import s from './MovieGallery.module.css';
 import movieImage from '../../images/movieImage.jpg';
 
 const MovieGallery = ({ movies }) => {
+    const location = useLocation();
 
     return (
         <>
@@ -12,7 +13,7 @@ const MovieGallery = ({ movies }) => {
                 <ul className={s.list}>
                     {movies.map(({ id, title, poster_path }) => (
                         <li key={id} className={s.item}>
-                            <Link className={s.link} to={`/movies/${id}`}>
+                            <Link className={s.link} to={`/movies/${id}`} state={{ from: location.pathname + location.search }}>
                             <img src={poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : movieImage}
                                 alt={title}
                                 className={s.image}
