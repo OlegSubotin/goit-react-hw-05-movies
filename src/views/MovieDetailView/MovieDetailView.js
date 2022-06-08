@@ -5,9 +5,6 @@ import MovieCard from "components/MovieCard";
 import Loader from "components/Loader/Loader.js";
 import s from './MovieDetailView.module.css';
 
-// import Cast from "views/Cast";
-// import Reviews from "views/Reviews";
-
 const Cast = lazy(() => import('../Cast'));
 const Reviews = lazy(() => import('../Reviews'));
 

@@ -1,3 +1,4 @@
+import { useSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Notiflix from 'notiflix';
 import SearchBar from 'components/SearchBar';
@@ -14,45 +15,54 @@ const STATUS = {
 };
 
 export default function MovieView() {
-    const [query, setQuery] = useState('');
+    const [, setQuery] = useState('');
     const [status, setStatus] = useState(STATUS.IDLE);
     const [movies, setMovies] = useState([]);
     const [error, setError] = useState(null);
+    const [searchParams, setSearchParams] = useSearchParams();
 
 
     useEffect(() => {
-        if (query === '') {
-            return;
-        };
-        
-        setStatus(STATUS.PENDING);
-        getSearchMovie(query)
+        if (searchParams.get('query') !== null) {
+            const newQuery = searchParams.get('query');
+            setStatus(STATUS.PENDING);
+        getSearchMovie(newQuery)
             .then(resp => {
                 const newMovies = resp.data.results.map(({ id, poster_path, title }) => ({ id, poster_path, title, }));
                 setMovies(newMovies);
                 setStatus(STATUS.RESOLVED)
+                resetForm();
             }).catch(error => {
                 setError(error);
                 setStatus(STATUS.REJECTED);
             });
-    }, [query]);
-
-    function handleFormSubmit(req) {
-        if (query === req) {
-            Notiflix.Notify.info('You have already found your movies');
-            return;
-        } else {
-            setMovies([]);
-            setQuery(req);
         };
+    }, [searchParams]);
+
+    function resetForm (){
+        setQuery('');
     };
 
+    function handleQueryChange(e) {
+        setQuery(e.currentTarget.value.toLowerCase());
+    };
 
-    
+    function handleFormSubmit(e) {
+        e.preventDefault();
+
+        const newQuery = e.target.elements.query.value.toLowerCase();
+
+        if (newQuery.trim() === "") {
+            Notiflix.Notify.info('Put a movie');
+            return;
+        };
+
+        setSearchParams({ query: newQuery });
+    };  
     
     return (
         <>
-            <SearchBar onSubmit={handleFormSubmit} />
+            <SearchBar onSubmit={handleFormSubmit} onChange={handleQueryChange}/>
             {status === STATUS.IDLE && <h1 className={s.title}>We can find any movie you want </h1>}
             {status === STATUS.PENDING && <Loader />}
             {status === STATUS.REJECTED && <h1 className={s.title}>{error}</h1>}
