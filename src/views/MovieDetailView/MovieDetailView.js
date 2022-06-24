@@ -1,4 +1,4 @@
-import { useParams, Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
+import { useParams, Routes, Route, Link, useLocation } from "react-router-dom";
 import { useState, useEffect, lazy, Suspense } from "react";
 import { getMovieById } from "services/movie-api";
 import MovieCard from "components/MovieCard";
@@ -15,7 +15,6 @@ const STATUS = {
 };
 
 export default function MovieDetailView() {
-    const navigate = useNavigate();
     const location = useLocation();
     const { movieId } = useParams();
     const [movie, setMovie] = useState('');
