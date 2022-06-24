@@ -3,8 +3,6 @@ import { useState, useEffect, lazy, Suspense } from "react";
 import { getMovieById } from "services/movie-api";
 import MovieCard from "components/MovieCard";
 import Loader from "components/Loader/Loader.js";
-import s from './MovieDetailView.module.css';
-
 
 const Cast = lazy(() => import('../Cast'));
 const Reviews = lazy(() => import('../Reviews'));
@@ -54,7 +52,7 @@ export default function MovieDetailView() {
         });
     }, [movieId]);
 
-
+    const path = location?.state?.from ?? '/';
 
     return (
         <>
@@ -63,16 +61,18 @@ export default function MovieDetailView() {
             {status === STATUS.REJECTED && <h1>{error}</h1>}
             {status === STATUS.RESOLVED && movie &&
                 <>
-                    <button className={s.button} onClick={() => {navigate(location?.state?.from ?? '/');}}>Go back</button>
+                <Link to={path}>
+                    Go back
+                </Link>
                     <MovieCard movie={movie} />
                     <div >
                         <p>
-                            <Link to="cast" >
+                            <Link to="cast" state={{ from: path }}>
                                 Cast
                             </Link>
                         </p>
                         <p>
-                            <Link to="reviews" >
+                            <Link to="reviews" state={{ from: path }}>
                                 Reviews
                             </Link>
                         </p>
